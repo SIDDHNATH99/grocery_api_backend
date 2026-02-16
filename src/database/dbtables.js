@@ -12,19 +12,28 @@ const CreateTable = async () => {
 
             if (element === "users") {
                 dbQuery = `CREATE TABLE IF NOT EXISTS "${element}" (
-            "id" SERIAL PRIMARY KEY,
-            "phone" VARCHAR(15) UNIQUE NOT NULL,
-            "created_at" TIMESTAMP DEFAULT NOW()
-          );`;
+                "id" SERIAL PRIMARY KEY,
+                "phone" VARCHAR(15) UNIQUE NOT NULL,
+                "created_at" TIMESTAMP DEFAULT NOW()
+                );`;
             } else if (element === "otp") {
                 dbQuery = `CREATE TABLE IF NOT EXISTS "${element}" (
-            "id" SERIAL PRIMARY KEY,
-            "user_id" INT REFERENCES users(id) ON DELETE CASCADE,
-            "otp" VARCHAR(100) NOT NULL,
-            "expires_at" TIMESTAMP NOT NULL,
-            "used" BOOLEAN DEFAULT FALSE,
-            "created_at" TIMESTAMP DEFAULT NOW()
-          );`;
+                "id" SERIAL PRIMARY KEY,
+                "user_id" INT REFERENCES users(id) ON DELETE CASCADE,
+                "otp" VARCHAR(100) NOT NULL,
+                "expires_at" TIMESTAMP NOT NULL,
+                "used" BOOLEAN DEFAULT FALSE,
+                "created_at" TIMESTAMP DEFAULT NOW()
+                );`;
+            } else if (element === "products") {
+                dbQuery = `CREATE TABLE IF NOT EXISTS "${element}" (
+                    "id" SERIAL PRIMARY KEY,
+                    "name" VARCHAR(50) NOT NULL,
+                    "price" VARCHAR(50) NOT NULL,
+                    "stock" VARCHAR(50) NOT NULL,
+                    "is_active" BOOLEAN DEFAULT TRUE,
+                    "created_at" TIMESTAMP DEFAULT NOW()
+                )`
             } else {
                 console.log(`Skipping table creation for: ${element}`);
                 continue;
