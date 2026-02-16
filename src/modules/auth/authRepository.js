@@ -1,5 +1,5 @@
 const bcrypt = require("bcryptjs");
-const pool = require("../../config/dbconfig");
+const pool = require("../../database/dbconfig");
 
 const findUserByPhone = async (phone) => {
   const res = await pool.query("SELECT * FROM users WHERE phone = $1", [phone]);
