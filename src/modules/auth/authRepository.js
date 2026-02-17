@@ -16,7 +16,7 @@ const createUser = async (phone) => {
 
 const saveOtp = async (userId, otp, expiresAt) => {
 
-  // console.log(userId , otp , expiresAt)
+  console.log(userId , otp , expiresAt)
 
   const res = await pool.query(
     `INSERT INTO otp(user_id, otp, expires_at) VALUES($1, $2, $3) RETURNING *`,

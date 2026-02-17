@@ -1,8 +1,11 @@
+require("dotenv").config();
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const repo = require("./authRepository");
 const JWT_SECRET = process.env.JWT_SECRET || "asecretkey";
-const OTP_EXPIRY_MINUTES = process.env.OTP_EXPIRY_MINUTES;
+const OTP_EXPIRY_MINUTES = process.env.EXPIRY_MINUTES;
+
+// console.log("OTP_EXPIRY_MINUTES" , OTP_EXPIRY_MINUTES)
 
 const sendOtp = async (phone) => {
 
@@ -15,7 +18,8 @@ const sendOtp = async (phone) => {
 
     const hashedOtp = await bcrypt.hash(otp, 10);
 
-    const expiresAt = new Date(Date.now() + OTP_EXPIRY_MINUTES * 60 * 1000);
+    const expiresAt = new Date(Date.now() + parseInt(OTP_EXPIRY_MINUTES) * 60 * 1000);
+    console.log("expiresAt" , expiresAt)
 
     await repo.saveOtp(user.id, hashedOtp, expiresAt);
 
