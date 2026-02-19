@@ -1,3 +1,4 @@
+const pool = require('../../database/dbconfig')
 const service = require('./productService')
 
 module.exports = {
@@ -25,7 +26,7 @@ module.exports = {
         }
     },
 
-    getproductsbyId: async (req, res) => {
+    getproductsbyId: async (req, res, next) => {
         try {
             console.log("params", req.params.id)
             let id = req.params.id
@@ -43,6 +44,29 @@ module.exports = {
             }
 
 
+        } catch (e) {
+            next(e)
+        }
+    },
+
+    createProduct: async (req, res, next) => {
+        try {
+            console.log("createproduct-body", req.body);
+
+            let addproduct = await service.createproduct(req.body)
+            // console.log("create-product-controller", addproduct)
+
+            if (addproduct.rowCount === 1) {
+                res.status(200).json({
+                    message: "Product added successfully!",
+                    condition: true
+                })
+            } else {
+                res.status(200).json({
+                    message: "Failed to add Product",
+                    condition: false
+                })
+            }
         } catch (e) {
             next(e)
         }

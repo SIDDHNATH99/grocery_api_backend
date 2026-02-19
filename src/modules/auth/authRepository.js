@@ -8,8 +8,8 @@ const findUserByPhone = async (phone) => {
 
 const createUser = async (phone) => {
   const res = await pool.query(
-    "INSERT INTO users(phone) VALUES($1) RETURNING *",
-    [phone]
+    "INSERT INTO users(phone , role) VALUES($1 , $2) RETURNING *",
+    [phone , 'user']
   );
   return res.rows[0];
 };

@@ -14,6 +14,7 @@ const CreateTable = async () => {
                 dbQuery = `CREATE TABLE IF NOT EXISTS "${element}" (
                 "id" SERIAL PRIMARY KEY,
                 "phone" VARCHAR(15) UNIQUE NOT NULL,
+                "role" VARCHAR(50) NOT NULL,
                 "created_at" TIMESTAMP DEFAULT NOW()
                 );`;
             } else if (element === "otp") {

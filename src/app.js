@@ -5,6 +5,7 @@ const healthroutes = require('../src/routes/healthroutes')
 const errormiddleware = require('../src/middlewares/errormiddleware')
 const authRoutes = require("./modules/auth/authRoutes")
 const productRoutes = require("./modules/products/productRoutes")
+const productadminRoutes = require("./modules/products/productadminRoutes")
 
 const app = express()
 
@@ -15,6 +16,7 @@ app.use(express.json());
 app.use('/health' , healthroutes)
 app.use("/auth", authRoutes)
 app.use("/product" , productRoutes)
+app.use("/productadmin" , productadminRoutes)
 
 app.use(errormiddleware);
 

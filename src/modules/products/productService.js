@@ -32,6 +32,18 @@ module.exports = {
         } catch (e) {
             return e;
         }
+    },
+
+    createproduct: async (product) => {
+        try {
+
+            let result = await repository.create_product(product)
+            // console.log("service-result", result)
+            return result;
+
+        } catch (e) {
+
+        }
     }
 
 }
