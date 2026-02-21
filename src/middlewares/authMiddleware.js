@@ -14,12 +14,15 @@ module.exports = {
 
     try {
 
-      console.log(token, JWT_SECRET)
+      // console.log(token, JWT_SECRET)
+
       const decoded = jwt.verify(token, JWT_SECRET);
+      
+      // console.log("decoded" , decoded)
 
       let adminuser = await pool.query(`SELECT * FROM users where id=$1`, [decoded.userId])
 
-      console.log("adminuser", adminuser.rows)
+      // console.log("adminuser", adminuser.rows)
 
       if (adminuser.rows.length === 0) {
         return res.status(401).json({ error: "User not found" });

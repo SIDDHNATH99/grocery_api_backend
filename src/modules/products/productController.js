@@ -1,4 +1,3 @@
-const pool = require('../../database/dbconfig')
 const service = require('./productService')
 
 module.exports = {
@@ -67,6 +66,62 @@ module.exports = {
                     condition: false
                 })
             }
+
+        } catch (e) {
+            next(e)
+        }
+    },
+
+    updateProduct: async (req, res, next) => {
+        try {
+
+            console.log(req.body, req.params);
+
+            let id = req.params.id
+
+            let updateproduct = await service.updateproduct(req.body, id)
+            console.log("controller-result", updateproduct.rowCount)
+
+            if (updateproduct.rowCount === 1) {
+                res.status(200).json({
+                    message: "Product updated successfully!",
+                    condition: true
+                })
+            } else {
+                res.status(200).json({
+                    message: "Failed to update Product",
+                    condition: false
+                })
+            }
+
+        } catch (e) {
+            next(e)
+        }
+    },
+
+    productstatus: async (req, res, next) => {
+        try {
+            // console.log(req.body)
+            // console.log(req.params)
+
+            let status = req.body.status
+            let id = req.params.id
+
+            let result = await service.productstatus(status, id)
+            console.log("result", result.rowCount)
+
+            if (result.rowCount === 1) {
+                res.status(200).json({
+                    message: "Product status updated successfully",
+                    condition: true
+                })
+            } else {
+                res.status(200).json({
+                    message: "Failed to update product status",
+                    condition: false
+                })
+            }
+
         } catch (e) {
             next(e)
         }

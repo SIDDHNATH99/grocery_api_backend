@@ -43,6 +43,29 @@ module.exports = {
 
         } catch (e) {
 
+            return e;
+        }
+    },
+
+    updateproduct: async (product, id) => {
+        try {
+            let result = await repository.update_product(product, id)
+            return result;
+        } catch (e) {
+            return e
+        }
+    },
+
+    productstatus: async (status, id) => {
+        try {
+            // console.log(status, id)
+
+            let result = await repository.productstatus(status, id)
+
+            return result;
+
+        } catch (e) {
+            return e
         }
     }
 

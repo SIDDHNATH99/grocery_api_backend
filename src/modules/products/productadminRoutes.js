@@ -8,5 +8,7 @@ const router = express.Router()
 router.use(authMiddleware.auth , adminMiddleware.adminMiddleware)
 
 router.post("/addproducts" , controller.createProduct)
+router.patch("/updateproduct/:id" , controller.updateProduct)
+router.patch("/productstatus/:id" , controller.productstatus)
 
 module.exports = router

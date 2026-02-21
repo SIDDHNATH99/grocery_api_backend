@@ -19,8 +19,30 @@ module.exports = {
     create_product: async (product) => {
 
         let { name, price, stock } = product
-        let result = await pool.query(`INSERT into PRODUCTS(name , price , stock) VALUES ($1 , $2, $3)`, [name, price, stock])
+        let result = await pool.query(`INSERT into products(name , price , stock) VALUES ($1 , $2, $3)`, [name, price, stock])
         // console.log("repo-result" , result)
         return result
+    },
+
+    update_product: async (product, id) => {
+
+        // console.log(product , id)
+
+        let result = await pool.query("UPDATE products set name=$1 , price=$2 , stock=$3 where id=$4 RETURNING *", [product.name, product.price, product.stock, id])
+        // console.log("update product result" , result)
+        return result
+
+    },
+
+    productstatus: async (status, id) => {
+        
+        let result = await pool.query(`UPDATE products set is_active=$1 where id=$2 RETURNING *`, [status, id])
+
+        // console.log(result)
+
+        return result
+
     }
+
+
 }

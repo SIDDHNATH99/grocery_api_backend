@@ -35,7 +35,17 @@ const CreateTable = async () => {
                     "is_active" BOOLEAN DEFAULT TRUE,
                     "created_at" TIMESTAMP DEFAULT NOW()
                 )`
-            } else {
+            } else if (element === "cart") {
+                dbQuery = `CREATE TABLE IF NOT EXISTS "${element}" (
+                    "id" SERIAL PRIMARY KEY,
+                    "product_id" INTEGER REFERENCES products(id) ON DELETE CASCADE,
+                    "user_id" INTEGER REFERENCES users(id) ON DELETE CASCADE,
+                    "quantity" INTEGER NOT NULL CHECK (quantity > 0),
+                    "created_at" TIMESTAMP DEFAULT NOW(),
+                    UNIQUE(user_id, product_id)
+                )`
+            }
+            else {
                 console.log(`Skipping table creation for: ${element}`);
                 continue;
             }
