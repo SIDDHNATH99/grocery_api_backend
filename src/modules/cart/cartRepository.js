@@ -4,30 +4,59 @@ module.exports = {
 
     getcartitems: async (id) => {
 
-        let result = await pool.query(`select name , price , stock from cart as c
+        let result = await pool.query(`select name , product_id , quantity from cart as c
             join products p
             on c.product_id = p.id
             where user_id=$1` , [id])
+        
+        console.log("result" , result.rows)
+
         return result;
+    },
+
+    findcartitems: async (userid, productid) => {
+
+        let result = await pool.query(`select * from cart where user_id=$1 and product_id=$2`, [userid, productid])
+
+        // console.log("result", result)
+
+        return result;
+
     },
 
     addcartitems: async (data) => {
 
-        let { product_id, user_id, quantity } = data;
+        console.log(data)
 
-        let quantitycheck = await pool.query(`select stock from products where id=$1`, [product_id])
+        let { productid, quantity, userid } = data;
 
-        console.log("quantitycheck", quantitycheck.rows[0].stock);
+        let result = await pool.query(`INSERT into cart ("product_id" , "user_id" , "quantity") values ($1,$2,$3)`, [productid, userid, quantity])
 
-        if (parseInt(quantitycheck.rows[0]) > parseInt(quantity)) {
-            let result = pool.query(`INSERT into cart ("product_id" , "user_id" , "quantity") values ($1,$2,$3)`, [product_id, user_id, quantity])
+        return result;
 
-            return result;
-            
-        }else{
-            return false
-        }
+    },
 
+    updateqty: async (data, newQty) => {
+
+        // console.log(data, id)
+
+        // let { productid, quantity, userid } = data;
+
+        let result = await pool.query(`UPDATE cart set quantity=$1 where product_id=$2 and user_id=$3`, [newQty, data.productid, data.userid])
+
+        return result
+
+    },
+
+    deletecartitems: async (updatedata) => {
+
+        // console.log(updatedata)
+
+        let result = await pool.query(`DELETE from cart where product_id=$1 and user_id=$2` , [updatedata.productid , updatedata.userid])
+
+        // console.log("result" , result)
+
+        return result;
 
     }
 

@@ -9,7 +9,7 @@ module.exports = {
             // console.log(req.body)
             // console.log(req.params)
 
-            let id = req.params.id
+            let id = req.user.id
 
             let result = await service.getcartitems(id)
             // console.log("cart-result", result)
@@ -36,30 +36,77 @@ module.exports = {
     },
 
     addcartitems: async (req, res, next) => {
+
         try {
 
-            // console.log(req.body)
-            let result = await service.addcartitems(req.body)
+            // console.log(req.body , req.user)
+
+            let data = {
+                productid: req.body.product_id,
+                quantity: req.body.quantity,
+                userid: req.user.id
+            }
+            let result = await service.addcartitems(data)
+
             console.log("result", result)
 
-            if (result.rowCount !== 0) {
+            res.status(200).json({
+                message: result.message,
+                condition: result.condition
+            })
 
-                res.status(200).json({
-                    message: "items added to cart",
-                    condition: true
-                })
+        } catch (e) {
+            next(e)
+        }
+    },
 
-            } else {
+    updatecart: async (req, res, next) => {
 
-                res.status(200).json({
-                    message: "failed to add items to cart",
-                    condition: false
-                })
+        try {
 
+            // console.log("body" , req.body)
+            // console.log("params" , req.params)
+
+            let data = {
+                productid: req.params.productid,
+                userid: req.user.id,
+                quantity: req.body.quantity
             }
+            let result = await service.updateqty(data)
+
+            // console.log("updatecart-result" , result);
+
+            res.status(200).json({
+                message: result.message,
+                condition: result.condition
+            })
+
+        } catch (e) {
+            next(e)
+        }
+    },
+
+    deletecartitems: async (req, res, next) => {
+        try {
+
+            let data = {
+                productid : parseInt(req.params.productid),
+                userid : req.user.id
+            }
+            console.log("data" , data);
+            
+            let result = await service.deleteitem(data)
+
+            console.log("result" , result)
+
+            res.status(200).json({
+                message : result.message,
+                condition : result.condition
+            })
 
         } catch (e) {
             next(e)
         }
     }
+
 }

@@ -11,8 +11,10 @@ module.exports = {
 
     getproductsbyid: async (id) => {
 
+        console.log("get-products-by-id" , id)
+
         result = await pool.query(`SELECT * from products where id=$1`, [id])
-        console.log("result", result)
+        // console.log("result", result)
         return result
     },
 
