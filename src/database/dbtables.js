@@ -31,7 +31,7 @@ const CreateTable = async () => {
                     "id" SERIAL PRIMARY KEY,
                     "name" VARCHAR(50) NOT NULL,
                     "price" VARCHAR(50) NOT NULL,
-                    "stock" VARCHAR(50) NOT NULL,
+                    "stock" INTEGER NOT NULL CHECK (quantity > 0) NOT NULL,
                     "is_active" BOOLEAN DEFAULT TRUE,
                     "created_at" TIMESTAMP DEFAULT NOW()
                 )`
@@ -43,6 +43,24 @@ const CreateTable = async () => {
                     "quantity" INTEGER NOT NULL CHECK (quantity > 0),
                     "created_at" TIMESTAMP DEFAULT NOW(),
                     UNIQUE(user_id, product_id)
+                )`
+            } else if (element === "orders") {
+                dbQuery = `CREATE TABLE IF NOT EXISTS "${element}" (
+                    "id" SERIAL PRIMARY KEY,
+                    "user_id" INTEGER REFERENCES users(id) ON DELETE CASCADE,
+                    "total_amount" INTEGER NOT NULL,
+                    "status" VARCHAR(50) NOT NULL,
+                    "created_at" TIMESTAMP DEFAULT NOW(),
+                    UNIQUE(id)
+                )`
+            } else if (element === "order_items") {
+                dbQuery = `CREATE TABLE IF NOT EXISTS "${element}" (
+                    "id" SERIAL PRIMARY KEY,
+                    "product_id" INTEGER REFERENCES products(id) ON DELETE CASCADE,
+                    "order_id" INTEGER REFERENCES orders(id) ON DELETE CASCADE,
+                    "quantity" INTEGER NOT NULL CHECK (quantity > 0),
+                    "price_at_purchase" INTEGER NOT NULL CHECK(price_at_purchase > 0),
+                    UNIQUE(id)
                 )`
             }
             else {

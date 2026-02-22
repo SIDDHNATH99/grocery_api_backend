@@ -4,7 +4,7 @@ module.exports = {
 
     getcartitems: async (id) => {
 
-        let result = await pool.query(`select name , product_id , quantity from cart as c
+        let result = await pool.query(`select name , product_id , quantity , price from cart as c
             join products p
             on c.product_id = p.id
             where user_id=$1` , [id])
@@ -26,7 +26,7 @@ module.exports = {
 
     addcartitems: async (data) => {
 
-        console.log(data)
+        // console.log(data)
 
         let { productid, quantity, userid } = data;
 
@@ -48,11 +48,13 @@ module.exports = {
 
     },
 
-    deletecartitems: async (updatedata) => {
+    deletecartitems: async (client = null , updatedata) => {
 
-        // console.log(updatedata)
+        // console.log(client , updatedata)
 
-        let result = await pool.query(`DELETE from cart where product_id=$1 and user_id=$2` , [updatedata.productid , updatedata.userid])
+        let db = client || pool
+
+        let result = await db.query(`DELETE from cart where product_id=$1 and user_id=$2` , [updatedata.productid , updatedata.userid])
 
         // console.log("result" , result)
 

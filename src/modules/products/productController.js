@@ -101,8 +101,6 @@ module.exports = {
 
     productstatus: async (req, res, next) => {
         try {
-            // console.log(req.body)
-            // console.log(req.params)
 
             let status = req.body.status
             let id = req.params.id

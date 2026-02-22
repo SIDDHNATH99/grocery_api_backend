@@ -11,7 +11,7 @@ module.exports = {
 
     getproductsbyid: async (id) => {
 
-        console.log("get-products-by-id" , id)
+        console.log("get-products-by-id", id)
 
         result = await pool.query(`SELECT * from products where id=$1`, [id])
         // console.log("result", result)
@@ -37,11 +37,22 @@ module.exports = {
     },
 
     productstatus: async (status, id) => {
-        
+
         let result = await pool.query(`UPDATE products set is_active=$1 where id=$2 RETURNING *`, [status, id])
 
         // console.log(result)
 
+        return result
+
+    },
+
+    reduce_stock: async (client, stock, product_id) => {
+
+        console.log(stock , product_id)
+        
+        let result = await client.query(`UPDATE products SET stock=$1 where id=$2 AND stock>=$1 
+            RETURNING *`, [stock, product_id])
+        
         return result
 
     }

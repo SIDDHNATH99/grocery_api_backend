@@ -7,6 +7,8 @@ const authRoutes = require("./modules/auth/authRoutes")
 const productRoutes = require("./modules/products/productRoutes")
 const productadminRoutes = require("./modules/products/productadminRoutes")
 const cartRoutes = require("./modules/cart/cartRoutes")
+const orderRoutes = require("./modules/orders/orderRoutes")
+
 const app = express()
 
 app.use(helmet());
@@ -18,6 +20,7 @@ app.use("/auth", authRoutes)
 app.use("/product" , productRoutes)
 app.use("/productadmin" , productadminRoutes)
 app.use("/cart" , cartRoutes)
+app.use("/orders" , orderRoutes)
 
 app.use(errormiddleware);
 

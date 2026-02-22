@@ -23,13 +23,13 @@ module.exports = {
 
             let qtycheck = await productRepository.getproductsbyid(data.productid)
 
-            // console.log("qtycheck", qtycheck.rows[0])
+            console.log("qtycheck", qtycheck.rows[0])
 
-            if (qtycheck.rows[0].length !== 0 && qtycheck.rows[0].is_active) {
+            if (qtycheck.rows.length !== 0 && qtycheck.rows[0].is_active) {
 
                 let cart = await repository.findcartitems(data.userid, data.productid)
 
-                console.log("add-to-cart-rows", cart.rows[0])
+                console.log("add-to-cart-rows", cart.rows)
 
                 let existingQty = cart.rows.length != 0 ? cart.rows[0].quantity : 0
 
@@ -37,9 +37,9 @@ module.exports = {
 
                 let newQty = existingQty + data.quantity;
 
-                // console.log("newQty", newQty)
+                console.log("newQty", newQty)
 
-                if (qtycheck.rows[0].stock > newQty) {
+                if (qtycheck.rows[0].stock >= newQty) {
 
                     if (cart.rows.length != 0) {
 
