@@ -3,6 +3,13 @@ const cartrepo = require('../cart/cartRepository')
 const productrepo = require('../products/productRepository')
 const pool = require('../../database/dbconfig')
 
+let orderstatusmapping = {
+    "PLACED": 0,
+    "CONFIRMED": 1,
+    "OUT_FOR_DELIVERY": 2,
+    "DELIVERED": 3
+}
+
 module.exports = {
 
     getordersbyid: async (id) => {
@@ -10,10 +17,99 @@ module.exports = {
         try {
 
             let result = await repository.getordersbyid(id)
-            return result
+
+            if (result.rowCount != 0) {
+                return ({
+                    message: "Order data fetched",
+                    data: result.rows,
+                    condition: true
+                })
+            } else {
+                return ({
+                    message: "failed to fetch order data",
+                    data: result.rows,
+                    condition: false
+                })
+            }
 
         } catch (e) {
 
+        }
+    },
+
+    getallorders: async () => {
+
+        try {
+
+            let result = await repository.getallorders()
+            // console.log("result", result)
+
+            if (result.rowCount != 0) {
+                return ({
+                    message: "All orders fetched",
+                    data: result.rows,
+                    condition: true
+                })
+            } else {
+                return ({
+                    message: "failed to fetch orders",
+                    data: result.rows,
+                    condition: false
+                })
+            }
+
+        } catch (e) {
+
+            return e
+
+        }
+    },
+
+    update_order_status: async (orderstatus, id) => {
+
+        try {
+
+            let checkstatus = await repository.getordersbyid(id)
+            console.log("checkstatus", checkstatus.rows[0].status)
+
+            if (checkstatus.rowCount != 0) {
+
+                let current = checkstatus.rows[0].status
+                console.log(current)
+
+                let currentposition = orderstatusmapping[current]
+                console.log("currentposition", currentposition)
+
+                let orderstatusposition = orderstatusmapping[orderstatus]
+                console.log("orderstatusposition", orderstatusposition)
+
+                if (orderstatusposition == currentposition + 1) {
+
+                    let result = await repository.update_order_status(orderstatus, id)
+                    console.log("result", result.rowCount)
+
+                    return ({
+                        message: "order updated successfully",
+                        condition: true
+                    })
+
+                } else {
+
+                    return ({
+                        message: "order status in not correct, Please get the correct status",
+                        condition: false
+                    })
+                }
+
+            } else {
+                return ({
+                    message: "No order found with this id",
+                    condition: false
+                })
+            }
+
+        } catch (e) {
+            return e
         }
     },
 

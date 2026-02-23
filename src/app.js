@@ -8,6 +8,7 @@ const productRoutes = require("./modules/products/productRoutes")
 const productadminRoutes = require("./modules/products/productadminRoutes")
 const cartRoutes = require("./modules/cart/cartRoutes")
 const orderRoutes = require("./modules/orders/orderRoutes")
+const orderadminRoutes = require("./modules/orders/orderAdminRoutes")
 
 const app = express()
 
@@ -21,7 +22,7 @@ app.use("/product" , productRoutes)
 app.use("/productadmin" , productadminRoutes)
 app.use("/cart" , cartRoutes)
 app.use("/orders" , orderRoutes)
-
+app.use("/orderadmin" , orderadminRoutes)
 app.use(errormiddleware);
 
 module.exports = app;
