@@ -1,5 +1,5 @@
 const bcrypt = require("bcryptjs");
-const pool = require("../../config/dbconfig");
+const pool = require("../../database/dbconfig");
 
 const findUserByPhone = async (phone) => {
   const res = await pool.query("SELECT * FROM users WHERE phone = $1", [phone]);
@@ -8,15 +8,15 @@ const findUserByPhone = async (phone) => {
 
 const createUser = async (phone) => {
   const res = await pool.query(
-    "INSERT INTO users(phone) VALUES($1) RETURNING *",
-    [phone]
+    "INSERT INTO users(phone , role) VALUES($1 , $2) RETURNING *",
+    [phone , 'user']
   );
   return res.rows[0];
 };
 
 const saveOtp = async (userId, otp, expiresAt) => {
 
-  // console.log(userId , otp , expiresAt)
+  console.log(userId , otp , expiresAt)
 
   const res = await pool.query(
     `INSERT INTO otp(user_id, otp, expires_at) VALUES($1, $2, $3) RETURNING *`,
